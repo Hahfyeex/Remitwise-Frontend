@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowLeft, TrendingUp, TrendingDown, DollarSign, PiggyBank } from 'lucide-react'
+import { ArrowLeft, TrendingUp, Send, PiggyBank, FileText, Shield } from 'lucide-react'
 
 export default function Dashboard() {
   return (
@@ -18,34 +18,38 @@ export default function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatCard
             title="Total Sent"
             value="$1,200"
-            change="+$300 this month"
-            icon={<DollarSign className="w-6 h-6" />}
-            trend="up"
+            detail1="+$300"
+            detail1Color="text-red-500"
+            detail2="+25%"
+            icon={Send}
+            showTrend={true}
           />
           <StatCard
             title="Savings"
             value="$360"
-            change="+$90 this month"
-            icon={<PiggyBank className="w-6 h-6" />}
-            trend="up"
+            detail1="+$90"
+            detail1Color="text-red-500"
+            detail2="+33%"
+            icon={PiggyBank}
+            showTrend={true}
           />
           <StatCard
             title="Bills Paid"
             value="$180"
-            change="3 bills this month"
-            icon={<TrendingUp className="w-6 h-6" />}
-            trend="neutral"
+            detail1="3 bills"
+            detail2="This month"
+            icon={FileText}
           />
           <StatCard
             title="Insurance"
             value="$60"
-            change="2 active policies"
-            icon={<TrendingDown className="w-6 h-6" />}
-            trend="neutral"
+            detail1="2 policies"
+            detail2="Active"
+            icon={Shield}
           />
         </div>
 
@@ -123,16 +127,42 @@ export default function Dashboard() {
   )
 }
 
-function StatCard({ title, value, change, icon, trend }: { title: string, value: string, change: string, icon: React.ReactNode, trend: 'up' | 'down' | 'neutral' }) {
+function StatCard({ 
+  title, 
+  value, 
+  detail1, 
+  detail1Color = 'text-gray-400', 
+  detail2, 
+  icon: Icon, 
+  showTrend = false 
+}: { 
+  title: string, 
+  value: string, 
+  detail1: string, 
+  detail1Color?: string, 
+  detail2?: string, 
+  icon: any, 
+  showTrend?: boolean 
+}) {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
-      <div className="flex items-center justify-between mb-2">
-        <div className="text-gray-600 text-sm">{title}</div>
-        <div className="text-blue-600">{icon}</div>
+    <div className="bg-[#141414] rounded-2xl p-5 flex flex-col justify-between min-h-[160px] border border-gray-800/50 shadow-xl">
+      <div className="flex justify-between items-start">
+        <div className="bg-red-500/10 p-2 rounded-lg">
+          <Icon className="w-5 h-5 text-red-500" strokeWidth={2} />
+        </div>
+        {showTrend && (
+          <TrendingUp className="w-4 h-4 text-red-500" />
+        )}
       </div>
-      <div className="text-2xl font-bold text-gray-900 mb-1">{value}</div>
-      <div className={`text-sm ${trend === 'up' ? 'text-green-600' : trend === 'down' ? 'text-red-600' : 'text-gray-600'}`}>
-        {change}
+
+      <div className="mt-4">
+        <p className="text-gray-500 text-sm font-medium">{title}</p>
+        <h3 className="text-white text-3xl font-bold mt-1 tracking-tight">{value}</h3>
+      </div>
+
+      <div className="flex justify-between items-end mt-3">
+        <span className={`text-sm font-bold ${detail1Color}`}>{detail1}</span>
+        {detail2 && <span className="text-[11px] text-gray-600 font-medium">{detail2}</span>}
       </div>
     </div>
   )
